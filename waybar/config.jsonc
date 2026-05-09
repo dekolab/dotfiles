@@ -1,0 +1,201 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 42,
+    "spacing": 0,
+    "exclusive": true,
+    "passthrough": false,
+    "gtk-layer-shell": true,
+    "reload_style_on_change": true,
+
+    // ── Modules layout ────────────────────────────────────────────────────────
+    "modules-left": [
+        "custom/logo",
+        "clock"
+    ],
+
+    "modules-center": [
+        "niri/window",
+        "niri/workspaces"
+    ],
+
+    "modules-right": [
+        "group/status",
+        "custom/separator",
+        "tray",
+        "custom/power"
+    ],
+
+    // ── Left modules ──────────────────────────────────────────────────────────
+
+    "custom/logo": {
+        "format": "",
+        "tooltip": false,
+        "on-click": "niri msg action spawn -- fuzzel"
+    },
+
+    "niri/workspaces": {
+        "format": "{icon}",
+        "format-icons": {
+            "1": "1",
+            "2": "2",
+            "3": "3",
+            "4": "4",
+            "5": "5",
+            "6": "6",
+            "7": "7",
+            "8": "8",
+            "9": "9",
+            "active": "",
+            "default": ""
+        },
+        "on-scroll-up": "niri msg action focus-workspace-up",
+        "on-scroll-down": "niri msg action focus-workspace-down",
+        "on-click": "activate"
+    },
+
+    "niri/window": {
+        "format": "{title}",
+        "max-length": 50,
+        "separate-outputs": true,
+        "rewrite": {
+            "(.*) — Mozilla Firefox": "󰈹  $1",
+            "(.*) - fish": "  $1",
+            "(.*) - zsh": "  $1",
+            "(.*) - nvim": "  $1",
+            "(.*) - Neovim": "  $1",
+            "(.*)Discord(.*)": "󰙯  Discord",
+            "(.*)Thunar(.*)": "󰉋  Files",
+            "(.*)Code(.*)": "󰨞  $1"
+        }
+    },
+
+    // ── Center modules ────────────────────────────────────────────────────────
+
+    "clock": {
+        "format": "{:%H:%M}",
+        "format-alt": "{:%A, %B %d  ·  %H:%M:%S}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "month",
+            "mode-mon-col": 3,
+            "weeks-pos": "right",
+            "on-scroll": 1,
+            "format": {
+                "months":     "<span color='#e8d5b0'><b>{}</b></span>",
+                "days":       "<span color='#a8b5c8'>{}</span>",
+                "weeks":      "<span color='#6b7fa3'><b>W{}</b></span>",
+                "weekdays":   "<span color='#d4a853'><b>{}</b></span>",
+                "today":      "<span color='#d4a853'><b><u>{}</u></b></span>"
+            }
+        },
+        "actions": {
+            "on-click-right": "mode",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
+        }
+    },
+
+    // ── Right modules ─────────────────────────────────────────────────────────
+
+    "group/status": {
+        "orientation": "horizontal",
+        "modules": [
+            "cpu",
+            "memory",
+            "temperature",
+            "pulseaudio",
+            "network",
+            "battery"
+        ]
+    },
+
+    "cpu": {
+        "format": "󰘚 {usage}%",
+        "tooltip": true,
+        "interval": 2,
+        "format-alt": "󰘚 {avg_frequency}GHz",
+        "on-click-right": "kitty --class=btop btop"
+    },
+
+    "memory": {
+        "format": "󰍛 {percentage}%",
+        "format-alt": "󰍛 {used:0.1f}G/{total:0.1f}G",
+        "tooltip-format": "RAM: {used:0.1f}G used of {total:0.1f}G\nSwap: {swapUsed:0.1f}G used of {swapTotal:0.1f}G",
+        "interval": 5,
+        "on-click-right": "kitty --class=btop btop"
+    },
+
+    "temperature": {
+        "critical-threshold": 80,
+        "format": "󰔏 {temperatureC}°",
+        "format-critical": "󰸁 {temperatureC}°",
+        "tooltip": true,
+        "interval": 5
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "󰂰 {volume}%",
+        "format-bluetooth-muted": "󰂲",
+        "format-muted": "󰝟",
+        "format-icons": {
+            "headphone": "󰋋",
+            "hands-free": "󰋋",
+            "headset": "󰋋",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+        "on-click": "pavucontrol",
+        "scroll-step": 5
+    },
+
+    "network": {
+        "format-wifi": "󰤨 {signalStrength}%",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󰤭",
+        "format-linked": "󰈀 (no IP)",
+        "tooltip-format-wifi": "SSID: {essid}\nSignal: {signalStrength}%\nFrequency: {frequency}GHz\n⬇ {bandwidthDownBits}  ⬆ {bandwidthUpBits}",
+        "tooltip-format-ethernet": "Interface: {ifname}\n⬇ {bandwidthDownBits}  ⬆ {bandwidthUpBits}",
+        "tooltip-format-disconnected": "Disconnected",
+        "interval": 5,
+        "on-click-right": "kitty --class=nmtui nmtui"
+    },
+
+    "battery": {
+        "states": {
+            "good": 90,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged": "󰚥 {capacity}%",
+        "format-alt": "{icon} {time}",
+        "format-good": "{icon} {capacity}%",
+        "format-full": "󰁹 Full",
+        "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "tooltip-format": "{timeTo}\nPower draw: {power}W",
+        "interval": 30
+    },
+
+    "custom/separator": {
+        "format": "│",
+        "tooltip": false
+    },
+
+    "tray": {
+        "icon-size": 16,
+        "spacing": 8,
+        "show-passive-items": true
+    },
+
+    "custom/power": {
+        "format": "󰐥",
+        "tooltip": false,
+        "on-click": "niri msg action spawn -- sh -c 'wlogout -p layer-shell'"
+    }
+}
